@@ -59,3 +59,8 @@ export const defaultValues: Blog = {
     metadata: emptyMetadata,
     content: ""
 };
+
+export interface Settings {
+    categories: Category[];
+    authors: Author[];
+}
