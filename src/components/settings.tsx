@@ -34,18 +34,19 @@ export const Settings = () => {
                             <div className="grid grid-cols-2 gap-4 h-full">
                                 <div className='overflow-y-auto'><HookFieldArray required title={"Categories"} name='categories' renderField={({ name, index }) => {
                                     return (
-                                        <>
-                                            <HookInput name={`${name}.${index}.title`} title="Title" required />
-                                        </>
+                                        <div className='flex gap-2'>
+                                            <div className='flex-grow'><HookInput name={`${name}.${index}.title`} title="Title" required /></div>
+                                            <div className='flex-grow'> <HookInput name={`${name}.${index}.color`} title="Color" required /></div>
+                                        </div>
                                     )
                                 }}
                                     defaultValues={{ title: "" }}
                                 /></div>
                                 <div className='overflow-y-auto h-full'><HookFieldArray required title={"Authors"} name='authors' renderField={({ name, index }) => {
                                     return (
-                                        <>
-                                            <HookInput name={`${name}.${index}.title`} title="Title" required />
-                                        </>
+                                        <div className='flex gap-2'>
+                                            <div className='flex-grow'><HookInput name={`${name}.${index}.name`} title="Name" required /></div>
+                                        </div>
                                     )
                                 }}
                                     defaultValues={{ title: "" }}
@@ -57,7 +58,7 @@ export const Settings = () => {
                     <div className="flex flex-row-reverse gap-4 w-full float-right flex-shrink-0 ">
                         <button type="submit" className="rounded-full bg-primary-700 py-2 px-4 w-64 text-white hover:bg-primary-900" >Save</button>
                         <Dialog.Close asChild>
-                            <button type="button" className="rounded-full bg-gray-700 py-2 px-4 w-64 text-white hover:bg-gray-900" >Close</button>
+                            <button type="button" className="rounded-full bg-gray-700 py-2 px-4 w-64 text-white hover:bg-gray-900" >Cancel</button>
                         </Dialog.Close>
 
                     </div>

@@ -6,6 +6,7 @@ export interface HookInputProps {
     title: string;
     name: string;
     required?: boolean;
+    className?: string;
 }
 
 interface HookFormProviderProps extends UseFormProps<FieldValues, any> {
