@@ -1,6 +1,13 @@
 import { FieldValues, FormProvider, UseControllerProps, UseControllerReturn, UseFormProps, useController, useForm, useFormContext } from "react-hook-form";
 
 
+
+export interface HookInputProps {
+    title: string;
+    name: string;
+    required?: boolean;
+}
+
 interface HookFormProviderProps extends UseFormProps<FieldValues, any> {
     children: React.ReactNode
 }

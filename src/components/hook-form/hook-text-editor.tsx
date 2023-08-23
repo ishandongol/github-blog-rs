@@ -15,7 +15,7 @@ export const HookTextEditor = (props: HookInputProps) => {
     const { field: { onChange, ...rest }, fieldState: { error } } = useHookController({ name, control, rules: { required } })
     return (
         <>
-            <InputTitle title={title} />
+            <InputTitle title={title} required={required} />
             <TextEditor {...rest} onChange={(value) => {
                 setValue(name, value)
 

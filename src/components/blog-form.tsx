@@ -6,6 +6,7 @@ import { HookInput } from "./hook-form/hook-input";
 import { HookForm } from "./hook-form/essentials";
 import { HookTextEditor } from "./hook-form/hook-text-editor";
 import { useFormContext } from "react-hook-form";
+import { HookSelect } from "./hook-form/hook-select";
 
 
 
@@ -30,6 +31,19 @@ export const BlogForm = () => {
                 <div className="grid grid-cols-2 gap-4">
                     <HookInput name="metadata.title" title="Title" required />
                     <HookInput name="metadata.excerpt" title="Excerpt" required />
+                    <HookSelect name="metadata.author" title="Author" required reactSelectProps={{
+                        options: [
+                            { label: "Javascript", value: "javascript" },
+                            { label: "Typescript", value: "typescript" },
+                        ],
+                    }} />
+                    <HookSelect name="metadata.categories" title="Categories" required reactSelectProps={{
+                        options: [
+                            { label: "Javascript", value: "javascript" },
+                            { label: "Typescript", value: "typescript" },
+                        ],
+                        isMulti: true
+                    }} />
                     <div className="col-span-2">
                         <HookTextEditor name="content" title="Content" required key={`${editorKey}`} />
                     </div>

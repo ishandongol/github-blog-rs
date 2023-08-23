@@ -10,9 +10,11 @@ export const Input = forwardRef<HTMLInputElement, Omit<React.InputHTMLAttributes
     )
 })
 
-export const InputTitle = ({ title }: { title: string }) => {
+export const InputTitle = ({ title, required }: { title: string, required?: boolean }) => {
     return (
-        <span className="font-thin">{title}</span>
+        <>
+            <span className="font-thin">{title} </span> {!required && <span className="text-xs text-primary-500 text-extrathin">(Optional)</span>}
+        </>
     )
 }
 
