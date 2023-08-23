@@ -1,5 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { HookForm } from './hook-form/essentials';
+import { HookFieldArray } from './hook-form/hook-field-array';
+import { HookInput } from './hook-form/hook-input';
 
 
 export const Settings = () => {
@@ -17,20 +19,41 @@ export const Settings = () => {
             </Dialog.Trigger>
             <Dialog.Overlay className=" bg-primary-700 opacity-20 absolute top-0 bottom-0 left-0 right-0 w-full h-[100vh] z-10" />
             <Dialog.Content className="top-0 left-0 z-50  w-full h-full absolute flex items-center justify-center">
-                <div className='w-5/6 h-5/6 bg-secondary-50 rounded-xl overflow-scroll relative  p-10 flex flex-col gap-4 '>
-                    <div className='flex-grow'>
+                <div className='w-5/6 h-5/6 bg-white rounded-xl  relative  p-10 flex flex-col gap-4 '>
+                    <div>
                         <Dialog.Title className='text-2xl font-light'>Settings</Dialog.Title>
                         <Dialog.Description className='mt-2 font-extralight'>
                             Change App Settings
                         </Dialog.Description>
                     </div>
+                    <div className='flex-grow overflow-hidden'>
+                        <HookForm onSubmit={async (values) => {
+                            console.log(values)
+                        }}>
 
-                    <HookForm onSubmit={async (values) => {
-                        console.log(values)
-                    }}>
+                            <div className="grid grid-cols-2 gap-4 h-full">
+                                <div className='overflow-y-auto'><HookFieldArray required title={"Categories"} name='categories' renderField={({ name, index }) => {
+                                    return (
+                                        <>
+                                            <HookInput name={`${name}.${index}.title`} title="Title" required />
+                                        </>
+                                    )
+                                }}
+                                    defaultValues={{ title: "" }}
+                                /></div>
+                                <div className='overflow-y-auto h-full'><HookFieldArray required title={"Authors"} name='authors' renderField={({ name, index }) => {
+                                    return (
+                                        <>
+                                            <HookInput name={`${name}.${index}.title`} title="Title" required />
+                                        </>
+                                    )
+                                }}
+                                    defaultValues={{ title: "" }}
+                                /></div>
+                            </div>
 
-                    </HookForm>
-
+                        </HookForm>
+                    </div>
                     <div className="flex flex-row-reverse gap-4 w-full float-right flex-shrink-0 ">
                         <button type="submit" className="rounded-full bg-primary-700 py-2 px-4 w-64 text-white hover:bg-primary-900" >Save</button>
                         <Dialog.Close asChild>
