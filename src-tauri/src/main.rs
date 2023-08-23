@@ -46,7 +46,7 @@ pub struct Blog {
 #[tauri::command]
 fn greet(blog: Blog) -> String {
     println!("The Blog Object{:?}", blog);
-    format!("The slug of the blog is: {}", blog.metadata.slug)
+    format!("The content of blog is: {}", blog.content)
 }
 
 fn main() {

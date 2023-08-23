@@ -14,14 +14,25 @@ import { InsertTable } from '@mdxeditor/editor/plugins/toolbar/components/Insert
 import { CreateLink } from '@mdxeditor/editor/plugins/toolbar/components/CreateLink'
 import { ListsToggle } from '@mdxeditor/editor/plugins/toolbar/components/ListsToggle'
 import { BlockTypeSelect } from '@mdxeditor/editor/plugins/toolbar/components/BlockTypeSelect'
+import { forwardRef } from 'react';
 
-export const TextEditor = () => {
-    return (
-        <MDXEditor
-            className=' bg-white w-full border border-slate-300 rounded-md shadow-sm focus:outline-none focus:border-primary-500 focus:ring-primary-500 focus:ring-1 '
-            markdown='# Hello world'
-            plugins={[toolbarPlugin({
-                toolbarContents: () => (<><UndoRedo /><BlockTypeSelect /><BoldItalicUnderlineToggles /><CodeToggle /><InsertTable /><CreateLink /><ListsToggle /></>)
-            }), headingsPlugin(), quotePlugin(), listsPlugin(), linkPlugin(), linkDialogPlugin(), tablePlugin()]} />
-    )
+
+interface TextEditorProps {
+    value: string
+    onChange: (value: string) => void
 }
+export const TextEditor = forwardRef<any, TextEditorProps>((props, ref) => {
+    return (
+        <>
+            <MDXEditor
+                {...props}
+                ref={ref}
+                className=' mt-2 bg-white w-full border border-slate-300 rounded-md shadow-sm focus:outline-none focus:border-primary-500 focus:ring-primary-500 focus:ring-1 '
+                markdown={props.value}
+                onChange={props.onChange}
+                plugins={[toolbarPlugin({
+                    toolbarContents: () => (<><UndoRedo /><BlockTypeSelect /><BoldItalicUnderlineToggles /><CodeToggle /><InsertTable /><CreateLink /><ListsToggle /></>)
+                }), headingsPlugin(), quotePlugin(), listsPlugin(), linkPlugin(), linkDialogPlugin(), tablePlugin()]} />
+        </>
+    )
+})
