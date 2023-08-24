@@ -52,6 +52,12 @@ pub enum BlogStatus {
 #[tauri::command]
 pub fn create_blog(mut blog: Blog) -> (BlogStatus, Option<String>) {
     if let Some(user_dirs) = UserDirs::new() {
+        let file_name = format!(
+            "{}{}{}.md",
+            user_dirs.document_dir().unwrap().to_str().unwrap(),
+            std::path::MAIN_SEPARATOR,
+            blog.metadata.slug
+        );
         let current_time = SystemTime::now()
             .duration_since(SystemTime::UNIX_EPOCH)
             .unwrap()
@@ -64,12 +70,8 @@ pub fn create_blog(mut blog: Blog) -> (BlogStatus, Option<String>) {
             .read(true)
             .write(true)
             .create(true)
-            .open(format!(
-                "{}{}{}.md",
-                user_dirs.document_dir().unwrap().to_str().unwrap(),
-                std::path::MAIN_SEPARATOR,
-                blog.metadata.slug
-            )) {
+            .open(file_name.clone())
+        {
             Ok(file) => file,
             Err(err) => {
                 return (
@@ -89,7 +91,7 @@ pub fn create_blog(mut blog: Blog) -> (BlogStatus, Option<String>) {
             }
         };
         return (
-            BlogStatus::Success(format!("Created: {}.md", blog.metadata.slug)),
+            BlogStatus::Success(format!("Created: {}", file_name)),
             Some(String::from_utf8(all_content).unwrap()),
         );
     }

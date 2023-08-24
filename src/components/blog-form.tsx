@@ -30,7 +30,7 @@ export const BlogForm = ({ settings: { authors, categories } }: { settings: Sett
     return (
         <>
             {response && <div className="my-4 mx-auto ">
-                {response[0].Success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl relative" role="alert">{response[1]}</div>}
+                {response[0].Success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl relative" role="alert">{response[0].Success}</div>}
                 {response[0].Failed && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative" role="alert">{response[0].Failed}</div>}
             </div>}
             <h1 className="text-3xl font-semibold text-center text-primary-800">Github Blogs Creator</h1>
@@ -62,7 +62,7 @@ export const BlogForm = ({ settings: { authors, categories } }: { settings: Sett
                                 resetForm()
                             }
                         }
-                    }} className="rounded-full bg-gray-700 py-2 px-4 w-full text-white hover:bg-gray-900" >Reset</button>
+                    }} className="rounded-full bg-gray-700 py-2 px-4 w-full text-white hover:bg-gray-900" >Clear</button>
                     <button type="submit" className="rounded-full bg-primary-700 py-2 px-4 w-full text-white hover:bg-primary-900" >Create .md</button>
                 </div>
             </HookForm>
