@@ -6,7 +6,7 @@ import { HookForm } from "./hook-form/essentials";
 import { HookTextEditor } from "./hook-form/hook-text-editor";
 import { useFormContext } from "react-hook-form";
 import { HookSelect } from "./hook-form/hook-select";
-import { invokeRustFunction } from "../libs/invoke-rust-fn";
+import { invokeRustFunction, warningAsk } from "../libs/invoke-rust-fn";
 
 
 interface BlogCreationResponse {
@@ -15,7 +15,7 @@ interface BlogCreationResponse {
 }
 export const BlogForm = ({ settings: { authors, categories } }: { settings: Settings }) => {
     const [response, setResponse] = useState<[BlogCreationResponse, string]>()
-    const { reset } = useFormContext()
+    const { reset, formState: { isDirty } } = useFormContext()
     const [editorKey, setEditorKey] = useState(true)
     const resetForm = () => {
         reset(defaultValues)
@@ -55,8 +55,15 @@ export const BlogForm = ({ settings: { authors, categories } }: { settings: Sett
 
                 </div>
                 <div className="grid grid-cols-2 gap-4 w-1/2 float-right mt-4">
-                    <button type="button" onClick={resetForm} className="rounded-full bg-gray-700 py-2 px-4 w-full text-white hover:bg-gray-900" >Reset</button>
-                    <button type="submit" className="rounded-full bg-primary-700 py-2 px-4 w-full text-white hover:bg-primary-900" >Save</button>
+                    <button type="button" onClick={async () => {
+                        if (isDirty) {
+                            const confirmed = await warningAsk("Are you sure you want to reset the form?", "Clear Current Blog")
+                            if (confirmed) {
+                                resetForm()
+                            }
+                        }
+                    }} className="rounded-full bg-gray-700 py-2 px-4 w-full text-white hover:bg-gray-900" >Reset</button>
+                    <button type="submit" className="rounded-full bg-primary-700 py-2 px-4 w-full text-white hover:bg-primary-900" >Create .md</button>
                 </div>
             </HookForm>
         </>

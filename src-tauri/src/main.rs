@@ -9,7 +9,7 @@ fn main() {
             blogs::create_blog,
             settings::save_settings,
             settings::get_settings,
-            settings::clear_settings
+            settings::clear_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
