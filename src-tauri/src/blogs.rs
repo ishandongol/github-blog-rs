@@ -1,7 +1,9 @@
+use directories::UserDirs;
 use serde::{Deserialize, Serialize};
 use std::fs::OpenOptions;
 use std::io::*;
 use std::time::SystemTime;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Metadata {
     image: Option<Image>,
@@ -49,40 +51,50 @@ pub enum BlogStatus {
 }
 #[tauri::command]
 pub fn create_blog(mut blog: Blog) -> (BlogStatus, Option<String>) {
-    let current_time = SystemTime::now()
-        .duration_since(SystemTime::UNIX_EPOCH)
-        .unwrap()
-        .as_secs() as i64;
-    println!("{:?}", current_time);
-    blog.metadata.published_at = current_time;
-    println!("{:?}", blog);
-    let yaml = serde_yaml::to_string(&blog.metadata).unwrap();
-    let mut file = match OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .open(format!("{}.md", blog.metadata.slug))
-    {
-        Ok(file) => file,
-        Err(err) => {
-            return (
-                BlogStatus::Failed(format!("Failed to open: {}", err.to_string())),
-                None,
-            )
-        }
-    };
-    let all_content = [b"---\n", yaml.as_bytes(), b"---\n", blog.content.as_bytes()].concat();
-    match file.write_all(&all_content) {
-        Ok(_) => "Saved".to_string(),
-        Err(e) => {
-            return (
-                BlogStatus::Failed(format!("Failed to write: {}", e.to_string())),
-                None,
-            )
-        }
-    };
+    if let Some(user_dirs) = UserDirs::new() {
+        let current_time = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_secs() as i64;
+        println!("{:?}", current_time);
+        blog.metadata.published_at = current_time;
+        println!("{:?}", blog);
+        let yaml = serde_yaml::to_string(&blog.metadata).unwrap();
+        let mut file = match OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .open(format!(
+                "{}{}{}.md",
+                user_dirs.document_dir().unwrap().to_str().unwrap(),
+                std::path::MAIN_SEPARATOR,
+                blog.metadata.slug
+            )) {
+            Ok(file) => file,
+            Err(err) => {
+                return (
+                    BlogStatus::Failed(format!("Failed to open: {}", err.to_string())),
+                    None,
+                )
+            }
+        };
+        let all_content = [b"---\n", yaml.as_bytes(), b"---\n", blog.content.as_bytes()].concat();
+        match file.write_all(&all_content) {
+            Ok(_) => "Saved".to_string(),
+            Err(e) => {
+                return (
+                    BlogStatus::Failed(format!("Failed to write: {}", e.to_string())),
+                    None,
+                )
+            }
+        };
+        return (
+            BlogStatus::Success(format!("Created: {}.md", blog.metadata.slug)),
+            Some(String::from_utf8(all_content).unwrap()),
+        );
+    }
     (
-        BlogStatus::Success(format!("Created: {}.md", blog.metadata.slug)),
-        Some(String::from_utf8(all_content).unwrap()),
+        BlogStatus::Failed(format!("Failed to get Documents Directory.")),
+        None,
     )
 }
