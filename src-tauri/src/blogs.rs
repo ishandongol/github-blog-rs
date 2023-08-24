@@ -1,4 +1,3 @@
-use directories::UserDirs;
 use serde::{Deserialize, Serialize};
 use std::fs::OpenOptions;
 use std::io::*;
@@ -49,54 +48,59 @@ pub enum BlogStatus {
     Success(String),
     Failed(String),
 }
+
+fn get_base_dir() -> String {
+    let dir = tauri::api::path::document_dir()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_owned();
+    dir
+}
+
 #[tauri::command]
 pub fn create_blog(mut blog: Blog) -> (BlogStatus, Option<String>) {
-    if let Some(user_dirs) = UserDirs::new() {
-        let file_name = format!(
-            "{}{}{}.md",
-            user_dirs.document_dir().unwrap().to_str().unwrap(),
-            std::path::MAIN_SEPARATOR,
-            blog.metadata.slug
-        );
-        let current_time = SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH)
-            .unwrap()
-            .as_secs() as i64;
-        println!("{:?}", current_time);
-        blog.metadata.published_at = current_time;
-        println!("{:?}", blog);
-        let yaml = serde_yaml::to_string(&blog.metadata).unwrap();
-        let mut file = match OpenOptions::new()
-            .read(true)
-            .write(true)
-            .create(true)
-            .open(file_name.clone())
-        {
-            Ok(file) => file,
-            Err(err) => {
-                return (
-                    BlogStatus::Failed(format!("Failed to open: {}", err.to_string())),
-                    None,
-                )
-            }
-        };
-        let all_content = [b"---\n", yaml.as_bytes(), b"---\n", blog.content.as_bytes()].concat();
-        match file.write_all(&all_content) {
-            Ok(_) => "Saved".to_string(),
-            Err(e) => {
-                return (
-                    BlogStatus::Failed(format!("Failed to write: {}", e.to_string())),
-                    None,
-                )
-            }
-        };
-        return (
-            BlogStatus::Success(format!("Created: {}", file_name)),
-            Some(String::from_utf8(all_content).unwrap()),
-        );
-    }
-    (
-        BlogStatus::Failed(format!("Failed to get Documents Directory.")),
-        None,
-    )
+    let document_dir = get_base_dir();
+    let file_name = format!(
+        "{}{}{}.md",
+        document_dir,
+        std::path::MAIN_SEPARATOR,
+        blog.metadata.slug
+    );
+    let current_time = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap()
+        .as_secs() as i64;
+    println!("{:?}", current_time);
+    blog.metadata.published_at = current_time;
+    println!("{:?}", blog);
+    let yaml = serde_yaml::to_string(&blog.metadata).unwrap();
+    let mut file = match OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(file_name.clone())
+    {
+        Ok(file) => file,
+        Err(err) => {
+            return (
+                BlogStatus::Failed(format!("Failed to open: {}", err.to_string())),
+                None,
+            )
+        }
+    };
+    let all_content = [b"---\n", yaml.as_bytes(), b"---\n", blog.content.as_bytes()].concat();
+    match file.write_all(&all_content) {
+        Ok(_) => "Saved".to_string(),
+        Err(e) => {
+            return (
+                BlogStatus::Failed(format!("Failed to write: {}", e.to_string())),
+                None,
+            )
+        }
+    };
+    return (
+        BlogStatus::Success(format!("Created: {}", file_name)),
+        Some(String::from_utf8(all_content).unwrap()),
+    );
 }
