@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Settings } from '../../libs';
 import { invokeRustFunction } from '../../libs/invoke-rust-fn';
 
