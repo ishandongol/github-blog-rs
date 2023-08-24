@@ -19,7 +19,6 @@ fn get_base_dir() -> String {
 }
 #[tauri::command]
 pub fn save_settings(settings: Settings) -> String {
-    println!("Save Settings");
     let base_dir = get_base_dir();
     let mut file = match OpenOptions::new()
         .read(true)

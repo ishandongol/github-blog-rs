@@ -7,6 +7,7 @@ import { HookTextEditor } from "./hook-form/hook-text-editor";
 import { useFormContext } from "react-hook-form";
 import { HookSelect } from "./hook-form/hook-select";
 import { invokeRustFunction, warningAsk } from "../libs/invoke-rust-fn";
+import { HookTextarea } from "./hook-form/hook-textarea";
 
 
 interface BlogCreationResponse {
@@ -37,8 +38,7 @@ export const BlogForm = ({ settings: { authors, categories } }: { settings: Sett
             <HookForm onSubmit={onSubmit} >
                 <div className="grid grid-cols-2 gap-4">
                     <HookInput name="metadata.title" title="Title" required />
-                    <HookInput name="metadata.excerpt" title="Excerpt" required />
-                    <HookSelect name="metadata.author" title="Author" required reactSelectProps={{
+                    <HookSelect name="metadata.author" title="Author" reactSelectProps={{
                         options: authors,
                         getOptionLabel: (option) => option.name,
                         getOptionValue: (option) => option.slug,
@@ -49,6 +49,13 @@ export const BlogForm = ({ settings: { authors, categories } }: { settings: Sett
                         getOptionLabel: (option) => option.title,
                         getOptionValue: (option) => option.slug,
                     }} />
+                    <HookInput name="metadata.image.src" title="Image File Name" />
+                    <div className="col-span-2">
+                        <HookTextarea name="metadata.image.attribution" title="Image Attribution" />
+                    </div>
+                    <div className="col-span-2">
+                        <HookTextarea name="metadata.excerpt" title="Excerpt" required />
+                    </div>
                     <div className="col-span-2">
                         <HookTextEditor name="content" title="Content" required key={`${editorKey}`} />
                     </div>

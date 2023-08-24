@@ -71,9 +71,7 @@ pub fn create_blog(mut blog: Blog) -> (BlogStatus, Option<String>) {
         .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap()
         .as_secs() as i64;
-    println!("{:?}", current_time);
     blog.metadata.published_at = current_time;
-    println!("{:?}", blog);
     let yaml = serde_yaml::to_string(&blog.metadata).unwrap();
     let mut file = match OpenOptions::new()
         .read(true)
