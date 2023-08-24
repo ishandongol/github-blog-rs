@@ -24,7 +24,7 @@ export interface Metadata {
     title: string;
     categories: Category[];
     excerpt: string;
-    published_at: number;
+    publishedAt: number;
 }
 
 export interface Blog {
@@ -52,7 +52,7 @@ const emptyMetadata: Metadata = {
     title: "",
     categories: [],
     excerpt: "",
-    published_at: 0
+    publishedAt: 0
 };
 
 export const defaultValues: Blog = {

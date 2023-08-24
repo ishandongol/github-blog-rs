@@ -27,7 +27,7 @@ export const TextEditor = forwardRef<any, TextEditorProps>((props, ref) => {
             <MDXEditor
                 {...props}
                 ref={ref}
-                className=' mt-2 bg-white w-full border border-slate-300 rounded-md shadow-sm focus:outline-none focus:border-primary-500 focus:ring-primary-500 focus:ring-1'
+                className=' mt-2 bg-white w-full border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:border-primary-500 focus:ring-primary-500 focus:ring-1'
                 markdown={props.value}
                 onChange={props.onChange}
                 plugins={[toolbarPlugin({

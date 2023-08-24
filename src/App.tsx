@@ -2,15 +2,19 @@ import { BlogForm } from "./components/blog-form"
 import { defaultValues } from "./libs"
 import { SettingsView } from "./components/settings-view"
 import { HookFormProvider } from "./components/hook-form/essentials"
+import { useRootContext } from "./components/context"
 
 const App = () => {
+  const { settings, getSettings
+  } = useRootContext()
+  const { categories, authors } = settings
   return (
-    <div className="w-full p-10 mx-auto h-[100vh] bg-secondary-50">
-      <HookFormProvider defaultValues={{ categories: [], authors: [] }}>
-        <SettingsView />
+    <div className="w-full p-10 mx-auto h-[100vh] bg-primary-50">
+      <HookFormProvider defaultValues={{ categories, authors }}>
+        <SettingsView getSettings={getSettings} settings={settings} />
       </HookFormProvider>
       <HookFormProvider defaultValues={defaultValues}>
-        <BlogForm />
+        <BlogForm settings={settings} />
       </HookFormProvider>
     </div>
   )

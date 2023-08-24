@@ -20,7 +20,7 @@ export const HookFieldArray = (props: HookFieldArrayProps) => {
         <>
             <InputTitle title={title} required={required} />
             {fields.map((item, index) => (
-                <div key={item.id} className="flex gap-2 items-start justify-start w-full  pt-4 px-6 my-4 pb-6 bg-secondary-50 border rounded-xl">
+                <div key={item.id} className="flex gap-2 items-start justify-start w-full  pt-4 px-6 my-4 pb-6 bg-primary-50 border rounded-xl">
                     <div className="flex-grow">{renderField({ item, index, name })}</div>
                     <button type="button" onClick={() => remove(index)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
