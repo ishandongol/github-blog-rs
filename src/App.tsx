@@ -9,7 +9,7 @@ const App = () => {
   } = useRootContext()
   const { categories, authors } = settings
   return (
-    <div className="w-full p-10 mx-auto h-[100vh] bg-primary-50">
+    <div className="w-full py-20">
       <HookFormProvider defaultValues={{ categories, authors }}>
         <SettingsView getSettings={getSettings} settings={settings} />
       </HookFormProvider>

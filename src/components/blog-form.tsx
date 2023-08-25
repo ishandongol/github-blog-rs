@@ -61,7 +61,9 @@ export const BlogForm = ({ settings: { authors, categories } }: { settings: Sett
                     </div>
 
                 </div>
-                <div className="grid grid-cols-2 gap-4 w-1/2 float-right mt-4">
+                <div className="grid grid-cols-4 gap-4 w-full mt-4">
+                    <div />
+                    <div />
                     <button type="button" onClick={async () => {
                         if (isDirty) {
                             const confirmed = await warningAsk("Are you sure you want to reset the form?", "Clear Current Blog")
